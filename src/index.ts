@@ -4,8 +4,7 @@ import {
   JupyterFrontEndPlugin
 } from '@jupyterlab/application';
 
-import { ICommandPalette, MainAreaWidget } from '@jupyterlab/apputils';
-import { Widget } from '@lumino/widgets';
+import { ICommandPalette, MainAreaWidget, IFrame } from '@jupyterlab/apputils';
 
 /**
  * Initialization data for the jupyterlab_apod extension.
@@ -15,23 +14,15 @@ const activateFunc = async (app: JupyterFrontEnd, palette: ICommandPalette) => {
     console.log('JupyterLab extension EverJupyter_React_Mindmap is activated!');
 
     // Create a blank content widget inside of a MainAreaWidget
-    const content = new Widget();
-    content.addClass('react-mindmap'); // new line
+    const content = new IFrame({
+      sandbox: ['allow-downloads' , 'allow-forms' , 'allow-modals' , 'allow-orientation-lock' , 'allow-pointer-lock' , 'allow-popups' , 'popups-to-escape-sandbox' , 'allow-presentation' , 'allow-same-origin' , 'allow-scripts' , 'allow-storage-access-by-user-activation' , 'allow-top-navigation' , 'allow-top-navigation-by-user-activation'],
+      referrerPolicy: 'unsafe-url'
+    });
+    content.url = "http://localhost:8080/react-mindmap/index.html";
     const widget = new MainAreaWidget({ content });
     widget.id = 'react-mindmap-jupyterlab';
     widget.title.label = 'ReactMindmap';
     widget.title.closable = true;
-
-    // Add an image element to the content
-    let iframe = document.createElement('iframe');
-    iframe.src = "http://127.0.0.1:8080/react-mindmap/index.html"
-    iframe.frameBorder="0" 
-    iframe.marginHeight="0" 
-    iframe.marginWidth="0" 
-    iframe.width="100%" 
-    iframe.height="100%" 
-    iframe.scrolling="auto"
-    content.node.appendChild(iframe);
 
     // Add an application command
     const command: string = 'react-mindmap:open';
@@ -58,7 +49,7 @@ const activateFunc = async (app: JupyterFrontEnd, palette: ICommandPalette) => {
 }
 
 const extension: JupyterFrontEndPlugin<void> = {
-  id: 'jupyterlab-apod',
+  id: 'react-mindmap',
   autoStart: true,
   requires: [ICommandPalette],
   activate: activateFunc
