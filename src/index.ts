@@ -41,6 +41,7 @@ const activateFunc = async (app: JupyterFrontEnd, palette: ICommandPalette, rest
         // Attach the widget to the main work area if it's not there
         app.shell.add(widget, 'main');
       }
+      widget.content.update();
       // Activate the widget
       app.shell.activateById(widget.id);
     }
